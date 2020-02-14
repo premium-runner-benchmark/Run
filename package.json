@@ -84,7 +84,7 @@
         "@types/redux-sentry-middleware": "0.1.1",
         "@types/shortid": "0.0.29",
         "@types/string-hash": "1.1.1",
-        "@types/superagent": "4.1.4",
+        "@types/superagent": "4.1.7",
         "@types/supertest": "2.0.8",
         "@typescript-eslint/eslint-plugin": "2.17.0",
         "@typescript-eslint/parser": "2.17.0",
