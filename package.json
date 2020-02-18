@@ -16,7 +16,6 @@
         "format": "prettier --write \"{src,test}/**/*.ts\"",
         "format:check": "prettier --check \"{src,test}/**/*.ts\"",
         "lint": "./node_modules/.bin/tslint --project tsconfig.json --config tslint.json",
-        "prepublishOnly": "npm run sentry",
         "test": "./node_modules/.bin/jest",
         "test:watch": "jest --watch",
         "uninstall": "rm -rf node_modules/ && rm -rf build/ && rm -rf h5p/ && rm -rf dist/",
@@ -113,7 +112,6 @@
         "file-loader": "5.0.2",
         "history": "4.10.1",
         "html-webpack-plugin": "4.0.0-beta.11",
-        "husky": "4.2.3",
         "identity-obj-proxy": "3.0.0",
         "is-wsl": "2.1.1",
         "jest": "25.1.0",
@@ -195,12 +193,5 @@
     },
     "publishConfig": {
         "access": "restricted"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "npm run format:check && npm run lint",
-            "pre-push": "npm run ci",
-            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-        }
     }
 }
