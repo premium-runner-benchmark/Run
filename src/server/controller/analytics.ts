@@ -3,6 +3,7 @@ import _path from 'path';
 import * as H5P from 'h5p-nodejs-library';
 
 import Logger from '../helper/Logger';
+import { trackEvent } from '../helper/track';
 
 import LumiError from '../helper/Error';
 
@@ -24,6 +25,7 @@ export class AnalyticsController {
     }
 
     public async process(h5pId: string, data: IAnalytics): Promise<void> {
+        trackEvent('run', 'completed');
         await this.db.saveAnalytics(h5pId, data);
         return;
     }

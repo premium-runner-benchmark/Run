@@ -3,7 +3,7 @@ import React from 'react';
 
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { drawerWidth } from '../../theme';
+// import { drawerWidth } from '../../theme';
 
 export default function Main(props: {
     children: React.ReactNode;
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => {
     return {
         content: {
             flexGrow: 1,
-            marginLeft: -drawerWidth,
+            // marginLeft: -drawerWidth,
             marginTop: '64px',
             // padding: theme.spacing(3),
             transition: theme.transitions.create('margin', {

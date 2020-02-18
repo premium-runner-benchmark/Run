@@ -18,6 +18,8 @@ import * as UI from '../ui';
 
 import api from 'lumi/api';
 
+import { trackEvent } from 'client/helpers/track';
+
 export function getAnalytics(id: string): any {
     return (dispatch: any) => {
         dispatch({
@@ -87,6 +89,8 @@ export function upload(file: File): any {
             type: RUN_UPLOAD_REQUEST
         });
 
+        trackEvent('run', 'uploaded');
+
         dispatch(UI.actions.changeRequestState('run_upload', 'pending', 0));
 
         return superagent
@@ -106,6 +110,8 @@ export function upload(file: File): any {
                 );
             })
             .then(({ body }) => {
+                trackEvent('run', 'uploaded-success');
+
                 dispatch(
                     UI.actions.changeRequestState(
                         'run_upload',
@@ -120,6 +126,8 @@ export function upload(file: File): any {
                 });
             })
             .catch(error => {
+                trackEvent('run', 'uploaded-error');
+
                 dispatch(
                     UI.actions.changeRequestState(
                         'run_upload',

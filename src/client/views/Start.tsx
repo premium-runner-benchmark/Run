@@ -23,6 +23,8 @@ import TextField from '@material-ui/core/TextField';
 
 import Logo from 'client/views/components/Logo';
 
+import { trackEvent } from 'client/helpers/track';
+
 const log = new Logger('container:app');
 
 interface IPassedProps {}
@@ -96,11 +98,13 @@ export class RunAdminContainer extends React.Component<
             const getAction = await this.props.getH5P(this.state.id);
 
             if (getAction.error) {
+                trackEvent('run', 'not-found');
                 this.props.notify(
                     `We couldn't find that ID. Please check and try again.`,
                     'error'
                 );
             } else {
+                trackEvent('run', 'found');
                 this.props.push(`/${this.state.id}`);
                 window.location.href = `${window.location.origin}/${this.state.id}`;
             }
