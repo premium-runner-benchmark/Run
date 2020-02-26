@@ -7,8 +7,14 @@ import Logger from '../../helpers/Logger';
 
 import { pieReduce } from '../../helpers/Data';
 
+import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
+import LeftDrawer from 'client/views/components/LeftDrawer';
 import Main from 'client/views/components/Main';
 import Root from 'client/views/components/Root';
 
@@ -30,14 +36,19 @@ const log = new Logger('container:app');
 interface IPassedProps {}
 
 interface IStateProps extends IPassedProps {
+    allAnalytics: IAnalytics[];
     analytics: IAnalytics;
     data: any[];
     h5pId: number;
     id?: string;
+
+    leftDrawerOpen: boolean;
 }
 
 interface IDispatchProps {
+    closeLeftDrawer: typeof actions.ui.closeLeftDrawer;
     getAnalytics: typeof actions.run.getAnalytics;
+    openLeftDrawer: typeof actions.ui.openLeftDrawer;
 }
 
 interface IComponentState {}
@@ -63,13 +74,47 @@ export class RunAdminContainer extends React.Component<
     public render(): JSX.Element {
         log.info(`rendering`);
 
-        const { analytics, data, h5pId } = this.props;
+        const {
+            allAnalytics,
+            analytics,
+            closeLeftDrawer,
+            data,
+            h5pId,
+            leftDrawerOpen,
+            openLeftDrawer
+        } = this.props;
         return (
             <div id="run">
                 <Root>
-                    {/* <CssBaseline /> */}
-                    <AppBar leftDrawerOpen={false} />
-                    <Main leftDrawerOpen={false}>
+                    <AppBar
+                        leftDrawerOpen={leftDrawerOpen}
+                        openLeftDrawer={openLeftDrawer}
+                    />
+                    <LeftDrawer
+                        leftDrawerOpen={leftDrawerOpen}
+                        closeLeftDrawer={closeLeftDrawer}
+                    >
+                        <List>
+                            {allAnalytics.map((a, index) => (
+                                <div key={a._id}>
+                                    <Link
+                                        variant="button"
+                                        color="textPrimary"
+                                        href={`/analytics?id=${a._id}`}
+                                    >
+                                        <ListItem>
+                                            <ListItemText
+                                                primary={a.h5p_id}
+                                                secondary={`${a.data.length} Runs`}
+                                            />
+                                        </ListItem>
+                                    </Link>
+                                    <Divider variant="inset" component="li" />
+                                </div>
+                            ))}
+                        </List>
+                    </LeftDrawer>
+                    <Main leftDrawerOpen={leftDrawerOpen}>
                         <Grid container={true} spacing={4}>
                             <Grid item={true} lg={6} sm={6} xl={6} xs={6}>
                                 <RunID id={h5pId} />
@@ -88,9 +133,6 @@ export class RunAdminContainer extends React.Component<
                                     lastRun={new Date(analytics.accessed_at)}
                                 />
                             </Grid>
-                            {/* <Grid item={true}>
-                                <PerformanceOverTime data={this.props.data} />
-                            </Grid> */}
                         </Grid>
                         <Grid container={true} spacing={4}>
                             <Grid item={true} lg={12} sm={12} xl={12} xs={12}>
@@ -112,10 +154,18 @@ export class RunAdminContainer extends React.Component<
 function mapStateToProps(state: IState, ownProps: IPassedProps): IStateProps {
     const id = qs.parse((ownProps as any).location.search).id as string;
     const analytics = selectors.run.analytics(state, id) || ({} as any);
+    const allAnalytics = [];
+
+    for (const key in state.run.analytics) {
+        allAnalytics.push(state.run.analytics[key]);
+    }
+
     return {
+        allAnalytics,
         analytics,
         data: analytics.data || [],
         h5pId: analytics.h5p_id,
+        leftDrawerOpen: state.ui.leftDrawerOpen,
         // tslint:disable-next-line: object-shorthand-properties-first
         id
     };
@@ -124,7 +174,9 @@ function mapStateToProps(state: IState, ownProps: IPassedProps): IStateProps {
 function mapDispatchToProps(dispatch: any): IDispatchProps {
     return bindActionCreators(
         {
-            getAnalytics: actions.run.getAnalytics
+            closeLeftDrawer: actions.ui.closeLeftDrawer,
+            getAnalytics: actions.run.getAnalytics,
+            openLeftDrawer: actions.ui.openLeftDrawer
         },
         dispatch
     );
