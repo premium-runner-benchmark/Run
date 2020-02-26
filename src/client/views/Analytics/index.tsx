@@ -156,6 +156,7 @@ function mapStateToProps(state: IState, ownProps: IPassedProps): IStateProps {
     const analytics = selectors.run.analytics(state, id) || ({} as any);
     const allAnalytics = [];
 
+    // tslint:disable-next-line: forin
     for (const key in state.run.analytics) {
         allAnalytics.push(state.run.analytics[key]);
     }
@@ -163,11 +164,11 @@ function mapStateToProps(state: IState, ownProps: IPassedProps): IStateProps {
     return {
         allAnalytics,
         analytics,
+        id,
+        // tslint:disable-next-line
         data: analytics.data || [],
         h5pId: analytics.h5p_id,
-        leftDrawerOpen: state.ui.leftDrawerOpen,
-        // tslint:disable-next-line: object-shorthand-properties-first
-        id
+        leftDrawerOpen: state.ui.leftDrawerOpen
     };
 }
 
