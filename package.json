@@ -37,7 +37,7 @@
         "fs-extra": "8.1.0",
         "glob-promise": "3.4.0",
         "h5p-nodejs-library": "0.10.10",
-        "mkdirp": "1.0.3",
+        "mkdirp": "1.0.4",
         "mongodb": "3.5.5",
         "promisepipe": "3.0.0",
         "query-string": "6.11.1",
