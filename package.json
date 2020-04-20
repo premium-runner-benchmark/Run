@@ -28,7 +28,7 @@
     "author": "Jan Philip Schellenberg",
     "dependencies": {
         "@sentry/node": "5.15.4",
-        "aws-sdk": "2.658.0",
+        "aws-sdk": "2.659.0",
         "body-parser": "1.19.0",
         "crc": "3.8.0",
         "debug": "4.1.1",
