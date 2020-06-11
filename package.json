@@ -40,7 +40,7 @@
         "mkdirp": "1.0.4",
         "mongodb": "3.5.8",
         "promisepipe": "3.0.0",
-        "query-string": "6.13.0",
+        "query-string": "6.13.1",
         "shortid": "2.2.15",
         "superagent": "5.2.2",
         "swagger-express-middleware": "2.0.5",
