@@ -33,7 +33,7 @@
         "crc": "3.8.0",
         "debug": "4.1.1",
         "express": "4.17.1",
-        "express-fileupload": "1.1.6",
+        "express-fileupload": "1.1.8",
         "fs-extra": "8.1.0",
         "glob-promise": "3.4.0",
         "h5p-nodejs-library": "0.10.10",
