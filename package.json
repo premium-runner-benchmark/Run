@@ -63,7 +63,7 @@
         "@semantic-release/github": "7.1.2",
         "@sentry/browser": "5.27.4",
         "@sentry/webpack-plugin": "1.13.0",
-        "@svgr/webpack": "5.4.0",
+        "@svgr/webpack": "5.5.0",
         "@types/aws-sdk": "2.7.0",
         "@types/body-parser": "1.19.0",
         "@types/debug": "4.1.5",
