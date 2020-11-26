@@ -91,7 +91,7 @@
         "@typescript-eslint/parser": "2.34.0",
         "babel-eslint": "10.1.0",
         "babel-jest": "25.5.1",
-        "babel-loader": "8.2.1",
+        "babel-loader": "8.2.2",
         "babel-plugin-named-asset-import": "0.3.7",
         "babel-preset-react-app": "9.1.2",
         "camelcase": "5.3.1",
