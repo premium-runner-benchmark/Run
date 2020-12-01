@@ -110,7 +110,7 @@
         "eslint-plugin-react": "7.21.5",
         "eslint-plugin-react-hooks": "2.5.1",
         "file-loader": "5.1.0",
-        "history": "4.10.1",
+        "history": "5.0.0",
         "html-webpack-plugin": "4.5.0",
         "identity-obj-proxy": "3.0.0",
         "is-wsl": "2.2.0",
