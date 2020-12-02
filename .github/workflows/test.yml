@@ -1,30 +1,91 @@
 name: Test
 
-on: [push, pull_request]
+on: [push, workflow_dispatch]
 
 jobs:
-    build:
-        runs-on: f64s
+  build:
+    continue-on-error: true
+    runs-on: ${{ matrix.runner_type }}
+    strategy:
+      matrix:
+        runner_type: [ds2v2,ds2v3,d2dsv4,d2asv4,d4asv4,ds3v2,ds4v2,ds5v2,f2s,f4s,f8s,f16s,f32s,f64s,ubuntu-latest]
+    env:
+      runId: ${{ matrix.runner_type }}-${{ github.workflow }}
+      artifactsDir: artifacts/${{ github.repository }}
+      iostatFile: artifacts/${{ github.repository }}/${{ matrix.runner_type }}-iostat.txt
+      vmstatFile: artifacts/${{ github.repository }}/${{ matrix.runner_type }}-vmstat.txt
+      timingFile: artifacts/${{ github.repository }}/${{ matrix.runner_type }}-timing.txt
 
-        strategy:
-            matrix:
-                node-version: [10.x]
+    steps:
+        # Start collecting stats
+        #- run: sudo apt -y install sysstat
+        - run: mkdir -p ${{ runner.temp }}/${{ env.artifactsDir }}
+        - run: iostat -yxmt 1 > ${{ runner.temp }}/${{ env.iostatFile }} &
+        - run: vmstat -n 1 > ${{ runner.temp }}/${{ env.vmstatFile }} &
+        - run: date -R > ${{ runner.temp }}/${{ env.timingFile }}
+          
+        - uses: actions/checkout@v2
+        - name: Use Node.js ${{ matrix.node-version }}
+          uses: actions/setup-node@v1
+          with:
+              node-version: 10.0
+        - name: install
+          run: npm ci
+        - name: lint
+          run: npm run lint
+        - name: build:client
+          run: npm run build:client
+        - name: build:server
+          run: npm run build:server
+        - name: unit-tests
+          run: npm run test
+          env:
+              CI: true
 
-        steps:
-            - uses: actions/checkout@v2
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
-              with:
-                  node-version: ${{ matrix.node-version }}
-            - name: install
-              run: npm ci
-            - name: lint
-              run: npm run lint
-            - name: build:client
-              run: npm run build:client
-            - name: build:server
-              run: npm run build:server
-            - name: unit-tests
-              run: npm run test
-              env:
-                  CI: true
+        # Collect/upload stats
+        - run: date -R >> ${{ runner.temp }}/${{ env.timingFile }}
+        - run: pkill iostat && pkill vmstat
+        - name: Upload a Build Artifact
+          uses: actions/upload-artifact@v2
+          with:
+              name: perfdata
+              path: ${{ runner.temp }}/${{ env.artifactsDir }}
+              if-no-files-found: error
+
+  process:
+    name: Process Perf Data
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+          architecture: x64
+      - uses: actions/checkout@v2
+        with:
+          repository: pjquirk/runnerperf
+          path: runnerperf
+      - uses: actions/checkout@v2
+        with:
+          repository: pjquirk/iostat-tool
+          path: runnerperf/iostat-tool
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v2  
+        with:
+          name: perfdata
+          path: runnerperf/data
+      - name: Prereqs
+        run: sudo apt -y install datamash  
+      - name: Process stats
+        run: |
+          cd runnerperf
+          (cd iostat-tool && python setup.py develop)
+          ls -l data
+          script/dumpcsv.sh data output
+          script/aggregate.sh output ${{ github.repository }}
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: summary-perfdata
+          path: runnerperf/output/summary.csv
+          if-no-files-found: error
