@@ -34,7 +34,7 @@
         "debug": "4.3.1",
         "express": "4.17.1",
         "express-fileupload": "1.2.0",
-        "fs-extra": "8.1.0",
+        "fs-extra": "9.0.1",
         "glob-promise": "3.4.0",
         "h5p-nodejs-library": "0.10.10",
         "mkdirp": "1.0.4",
