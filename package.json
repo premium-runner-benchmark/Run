@@ -43,7 +43,7 @@
         "query-string": "6.13.7",
         "shortid": "2.2.16",
         "superagent": "5.3.1",
-        "swagger-express-middleware": "2.0.5",
+        "swagger-express-middleware": "4.0.2",
         "unzipper": "^0.10.5"
     },
     "devDependencies": {
