@@ -23,7 +23,8 @@ jobs:
         - run: iostat -yxmt 1 > ${{ runner.temp }}/${{ env.iostatFile }} &
         - run: vmstat -n 1 > ${{ runner.temp }}/${{ env.vmstatFile }} &
         - run: date -R > ${{ runner.temp }}/${{ env.timingFile }}
-          
+        
+        - uses: actions/checkout@v2.3.4
         - name: Use Node.js ${{ matrix.node-version }}
           uses: actions/setup-node@v1
           with:
